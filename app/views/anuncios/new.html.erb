@@ -1,0 +1,10 @@
+<!-- app/views/anuncios/new.html.erb -->
+<%= form_with model: [@usuario, @anuncio], local: true, url: usuario_anuncios_path(@usuario), html: { multipart: true } do |form| %>
+  <div>
+    <%= form.label :image %>
+    <%= form.file_field :image %>
+  </div>
+  <div>
+    <%= form.submit "Crear Anuncio" %>
+  </div>
+<% end %>
