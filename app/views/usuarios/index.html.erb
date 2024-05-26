@@ -1,0 +1,10 @@
+<h1>Lista Usuarios</h1>
+
+<ul>
+<% @usuarios.each do |usuario|%>
+
+ <li>  <%= link_to usuario.nombre, usuario, data: { turbo: "false" }%></li><!-- Si no pongo false por defecto no cambia-->
+<% end %>
+<ul>
+    <%= link_to "Create Usuario", new_usuario_path%>
+   

@@ -1,0 +1,26 @@
+<%= form_with model: usuario do |form| %>
+  <div>
+    <%= form.label :nombre %>
+    <%= form.text_field :nombre %>
+     <% usuario.errors.full_messages_for(:nombre).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+  </div>
+  <div>
+    <%= form.label :ciudad %>
+    <%= form.text_field :ciudad %>
+    <% usuario.errors.full_messages_for(:ciudad).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+  </div>
+  <div>
+    <%= form.label :tlf %>
+    <%= form.number_field :tlf %>
+    <% usuario.errors.full_messages_for(:tlf).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+  </div>
+  <div>
+    <%= form.submit "Crear Usuario" %>
+  </div>
+<% end %>

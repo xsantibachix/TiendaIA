@@ -1,12 +1,10 @@
 Rails.application.routes.draw do
-  get 'usuarios/new'
-  get 'usuarios/create'
   get 'portada/home'
   
   
 
-  resources :usuarios, only: [:new, :create]  do 
-    resources :anuncios, only: [:new, :create, :show]
+  resources :usuarios do 
+    resources :anuncios
   end
 
   root 'portada#home'

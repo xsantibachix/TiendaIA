@@ -1,0 +1,24 @@
+<h1>Mostrar Usuario</h1>
+<%= link_to "Usuario List", usuarios_path%>
+<table>
+    <tr>
+        <th>Nombre</th>
+        <th>Ciudad</th>
+        <th>Telefono</th>
+    </tr>
+    <tr>
+        <td><%= @usuario.nombre %></td>
+        <td><%= @usuario.ciudad %></td>
+        <td><%= @usuario.tlf %></td>
+    </tr>
+<table>
+
+<%= link_to "Edit Usuario", edit_usuario_path(@usuario)%><br>
+ <%= link_to "Destroy", usuario_path(@usuario), data:{turbo_method: :delete,turbo_confirm: "Are you sure?"}%>
+
+
+<h2>Anuncios</h2>
+<%= render @usuario.anuncios %>
+
+<h2>Add a anuncio:</h2>
+<%= render '/anuncios/form' %>

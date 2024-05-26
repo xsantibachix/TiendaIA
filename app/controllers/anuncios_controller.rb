@@ -3,30 +3,29 @@ require 'json'
 require 'uri'
 
 class AnunciosController < ApplicationController
-  before_action :set_usuario, only: [:new, :create, :show]
-  before_action :set_anuncio, only: [:show]
-
-  def new
-    @anuncio = @usuario.anuncios.build
-  end
-
+  
   def create
-    @anuncio = @usuario.anuncios.build(anuncio_params)
+    @usuario = Usuario.find(params[:usuario_id])
 
-    if params[:anuncio][:image].present?
+    unless params[:anuncio][:image].nil?
+   
+      @anuncio = @usuario.anuncios.create(anuncio_params)
+    
+   
+ 
       image = params[:anuncio][:image]
       response = send_image_to_flask_api(image)
 
-      if handle_image_response(response)
+     if handle_image_response(response)
         if @anuncio.save
           flash[:notice] = "Anuncio creado exitosamente"
-          redirect_to usuario_anuncio_path(@usuario, @anuncio)
+          redirect_to @usuario
         else
           flash[:alert] = "Error creando el anuncio"
-          render :new
+          redirect_to @usuario
         end
       else
-        render :new
+        redirect_to @usuario
       end
     else
       flash[:alert] = "Debe subir una imagen"
@@ -34,26 +33,16 @@ class AnunciosController < ApplicationController
     end
   end
 
-  def show
-    # @anuncio se define en el callback set_anuncio
-  end
+
 
   private
-
-  def set_usuario
-    @usuario = Usuario.find(params[:usuario_id])
-  end
-
-  def set_anuncio
-    @anuncio = @usuario.anuncios.find(params[:id])
-  end
 
   def anuncio_params
     params.require(:anuncio).permit(:image)
   end
 
   def send_image_to_flask_api(image)
-    uri = URI.parse('http://localhost:5000/analyze_image') # Ajusta la URL según sea necesario
+    uri = URI.parse('http://localhost:5000/analyze_image')
     http = Net::HTTP.new(uri.host, uri.port)
     request = Net::HTTP::Post.new(uri.request_uri)
     form_data = [['image', image.tempfile]]
