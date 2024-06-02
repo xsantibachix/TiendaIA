@@ -1,18 +1,17 @@
 Rails.application.routes.draw do
-  get 'portada/home'
-  
-  
+  root 'anuncios#index'  # Página de inicio por defecto, puede ser otra
 
-  resources :usuarios do 
+  resources :usuarios, only: [:show, :new, :create, :edit, :update, :destroy] do
     resources :anuncios
   end
+  
 
-  root 'portada#home'
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
- 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  # Rutas para registro y autenticación
+  get '/anuncios', to: 'anuncios#index'
+  get '/registro', to: 'usuarios#new', as: 'registro'  # Página de registro
+  post '/registro', to: 'usuarios#create'  # Acción de registro
+  get '/login', to: 'sessions#new', as: 'login'  # Página de inicio de sesión
+  post '/login', to: 'sessions#create'  # Acción de inicio de sesión
+  get '/logout', to: 'sessions#destroy', as: 'logout'
+  get '/me', to: 'usuarios#show', as: 'me'
 end

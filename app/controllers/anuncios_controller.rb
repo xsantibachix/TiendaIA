@@ -3,20 +3,24 @@ require 'json'
 require 'uri'
 
 class AnunciosController < ApplicationController
+  skip_before_action :authorize, only: [:index]
+
+  def index
   
+    @anuncios = Anuncio.all.order(created_at: :desc)
+            
+  end
+
   def create
     @usuario = Usuario.find(params[:usuario_id])
 
     unless params[:anuncio][:image].nil?
-   
       @anuncio = @usuario.anuncios.create(anuncio_params)
-    
-   
- 
+
       image = params[:anuncio][:image]
       response = send_image_to_flask_api(image)
 
-     if handle_image_response(response)
+      if handle_image_response(response)
         if @anuncio.save
           flash[:notice] = "Anuncio creado exitosamente"
           redirect_to @usuario
@@ -34,6 +38,13 @@ class AnunciosController < ApplicationController
   end
 
 
+  def destroy
+   
+    @usuario = Usuario.find(params[:usuario_id])
+    @anuncio = @usuario.anuncios.find(params[:id])
+    @anuncio.destroy
+    redirect_to  usuario_path(current_usuario), notice:  "Anuncio eliminado exitosamente."
+  end
 
   private
 
@@ -76,3 +87,4 @@ class AnunciosController < ApplicationController
     true
   end
 end
+
