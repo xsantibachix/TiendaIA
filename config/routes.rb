@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   root 'anuncios#index'  # Página de inicio por defecto, puede ser otra
 
-  resources :usuarios, only: [:show, :new, :create, :edit, :update, :destroy] do
+  resources :usuarios do
     resources :anuncios
   end
   
@@ -13,5 +13,4 @@ Rails.application.routes.draw do
   get '/login', to: 'sessions#new', as: 'login'  # Página de inicio de sesión
   post '/login', to: 'sessions#create'  # Acción de inicio de sesión
   get '/logout', to: 'sessions#destroy', as: 'logout'
-  get '/me', to: 'usuarios#show', as: 'me'
 end
